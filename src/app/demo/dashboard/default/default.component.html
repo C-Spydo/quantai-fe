@@ -1,21 +1,81 @@
 <div class="row">
-  @for (analytic of AnalyticEcommerce; track analytic) {
-    <div class="col-md-6 col-xl-3">
-      <app-card [showHeader]="false" blockClass="dashboard-card">
-        <h6 class="mb-2 f-w-400 text-muted">{{ analytic.title }}</h6>
-        <h4 class="mb-3">
-          {{ total_summary }}
-          <span class="badge {{ analytic.background }} border {{ analytic.border }} ">
-            <i antIcon type="{{ analytic.icon }}" theme="outline"></i>
-            {{ analytic.percentage }}
-          </span>
-        </h4>
-        <p class="mb-0 text-muted text-sm">
-          You have requested for 
-          <span class="{{ analytic.color }}">{{ total_summary }}</span>
-          so far
-        </p>
-      </app-card>
+  <!-- Main Tab Group: Stock Selection -->
+  <div class="col-12">
+    <div class="d-flex mb-3">
+      <button 
+        *ngFor="let stock of stocks; let i = index" 
+        class="btn me-2" 
+        [ngClass]="{'btn-primary': activeStockTab === i, 'btn-outline-primary': activeStockTab !== i}"
+        (click)="setActiveStock(i)">
+        {{ stock.symbol }}
+      </button>
     </div>
-  }
+  </div>
+</div>
+
+<!-- Stock Summary Card -->
+<div class="row">
+  <div class="col-12">
+    <app-card *ngIf="stocks[activeStockTab]" blockClass="dashboard-card">
+      <h4 class="fw-bold">{{ stocks[activeStockTab].name }}</h4>
+
+      <!-- Sub Tab Group: Sections inside Stock Summary -->
+      <div class="d-flex mb-3">
+        <button 
+          *ngFor="let tab of subTabs; let i = index" 
+          class="btn me-2" 
+          [ngClass]="{'btn-primary': activeSubTab === i, 'btn-outline-primary': activeSubTab !== i}"
+          (click)="setActiveSubTab(i)">
+          {{ tab.label }}
+        </button>
+      </div>
+
+      <!-- Sub Tab Content -->
+      <div *ngIf="activeSubTab === 0">
+        <apx-chart 
+          *ngIf="chartSeries[activeStockTab].length > 0"
+          [series]="chartSeries[activeStockTab]" 
+          [chart]="{ type: 'line', height: 350 }"
+          [tooltip]="chartOptions.tooltip"
+          [xaxis]="chartOptions.xaxis"
+          [stroke]="{ curve: 'smooth', width: 2, colors: ['#008FFB', '#FF4560'] }">
+        </apx-chart>
+      </div>
+
+      <div *ngIf="activeSubTab === 1">
+        <apx-chart 
+          *ngIf="chartSeriesb[activeStockTab].length > 0"
+          [series]="chartSeriesb[activeStockTab]" 
+          [chart]="{ type: 'candlestick', height: 350 }"
+          [tooltip]="chartOptionsb.tooltip"
+          [xaxis]="chartOptionsb.xaxis">
+        </apx-chart>
+      </div>
+
+      <div *ngIf="activeSubTab === 2">
+        <apx-chart 
+          [series]="sentimentSeries[activeStockTab]" 
+          [chart]="{ type: 'pie', height: 350 }"
+          [labels]="['Positive', 'Negative', 'Neutral']">
+        </apx-chart>
+      </div>
+
+      <div *ngIf="activeSubTab === 3">
+        <apx-chart 
+          [series]="sectorSeries[activeStockTab]" 
+          [chart]="{ type: 'bar', height: 350 }"
+          [xaxis]="{ categories: ['Tech', 'Finance', 'Healthcare', 'Energy', 'Retail'] }">
+        </apx-chart>
+      </div>
+
+      <div *ngIf="activeSubTab === 4">
+        <p class="p-3 bg-light border rounded">{{ insightText[activeStockTab] }}</p>
+      </div>
+
+      <div *ngIf="activeSubTab === 5">
+        <textarea [(ngModel)]="feedbackText" class="form-control" rows="3" placeholder="Enter your feedback"></textarea>
+        <button class="btn btn-primary mt-2" (click)="submitFeedback()">Submit</button>
+      </div>
+    </app-card>
+  </div>
 </div>
