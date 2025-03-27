@@ -35,18 +35,6 @@ const routes: Routes = [
       {
         path: 'color',
         loadComponent: () => import('./demo/component/basic-component/typography/typography.component').then((c) => c.TypographyComponent)
-      },
-      {
-        path: 'summarise-video',
-        loadComponent: () => import('./demo/summarise-video/summarise-video.component').then((c) => c.SummariseVideoPageComponent)
-      },
-      {
-        path: 'summary-history',
-        loadComponent: () => import('./demo/summary-history/summary-history.component').then((c) => c.SummaryHistoryPageComponent)
-      },
-      {
-        path: 'summary-details',
-        loadComponent: () => import('./demo/summary-details/summary-details.component').then((c) => c.SummaryDetailsPageComponent)
       }
     ]
   },
