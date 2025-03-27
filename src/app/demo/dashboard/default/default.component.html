@@ -32,16 +32,21 @@
 
       <!-- Sub Tab Content -->
       <div *ngIf="activeSubTab === 0">
-        <apx-chart 
-          *ngIf="chartSeries[activeStockTab].length > 0"
-          [series]="chartSeries[activeStockTab]" 
-          [chart]="{ type: 'line', height: 350 }"
-          [tooltip]="chartOptions.tooltip"
-          [xaxis]="chartOptions.xaxis"
-          [stroke]="{ curve: 'smooth', width: 2, colors: ['#008FFB', '#FF4560'] }">
-        </apx-chart>
+        <!-- <apx-chart 
+        *ngIf="chartSeries[activeStockTab]?.length > 0"
+        [series]="chartSeries[activeStockTab]" 
+        [chart]="{ type: 'line', height: 350 }"
+        [xaxis]="{
+          categories: ['Point 1', 'Point 2', 'Point 3', 'Point 4', 'Point 5', 'Point 6', 'Point 7', 'Point 8', 'Point 9', 'Point 10', 'Point 11']
+        }"
+        [stroke]="{ curve: 'smooth', width: 2 }"
+        
+        >
+      </apx-chart> -->
+      <div echarts [options]="chartOptionsec" class="chart-container"></div>
       </div>
 
+      
       <div *ngIf="activeSubTab === 1">
         <apx-chart 
           *ngIf="chartSeriesb[activeStockTab].length > 0"
@@ -79,3 +84,9 @@
     </app-card>
   </div>
 </div>
+<style>
+  .chart-container {
+  width: 100%;
+  height: 400px;
+}
+</style>

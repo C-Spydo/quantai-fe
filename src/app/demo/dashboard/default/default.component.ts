@@ -18,6 +18,18 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
+import * as echarts from 'echarts/core'; 
+import { CanvasRenderer } from 'echarts/renderers';
+import { LineChart } from 'echarts/charts';
+import {
+  GridComponent,
+  TooltipComponent,
+  LegendComponent
+} from 'echarts/components';
+
+echarts.use([CanvasRenderer, LineChart, GridComponent, TooltipComponent, LegendComponent]);
+
 @Component({
   selector: 'app-default',
   standalone: true,
@@ -27,7 +39,11 @@ import jsPDF from 'jspdf';
     IconDirective,
     ChartComponent,
     NgApexchartsModule,
-    FormsModule
+    FormsModule,
+    NgxEchartsModule
+  ],
+  providers: [
+    { provide: NGX_ECHARTS_CONFIG, useValue: { echarts } } // Ensure ECharts is properly provided
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './default.component.html',
@@ -60,19 +76,187 @@ export class DefaultComponent {
     { label: "Feedback" }
   ];
 
+  chartOptionsec = {
+    title: {
+      text: 'Customized Line Chart',
+      left: 'center',
+      textStyle: {
+        color: '#333',
+        fontSize: 18,
+        fontWeight: 'bold'
+      }
+    },
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      borderColor: '#048FFB',
+      borderWidth: 1,
+      textStyle: {
+        color: '#333'
+      },
+      formatter: (params: any) => {
+        let value = params[0].value;
+        return `<strong>Value:</strong> ${value}`;
+      }
+    },
+    grid: {
+      left: '5%',
+      right: '5%',
+      bottom: '10%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: ['Point 1', 'Point 2', 'Point 3', 'Point 4', 'Point 5', 'Point 6'],
+      axisLine: {
+        lineStyle: {
+          color: '#ccc'
+        }
+      },
+      axisLabel: {
+        fontSize: 12
+      }
+    },
+    yAxis: {
+      type: 'value',
+      axisLine: {
+        lineStyle: {
+          color: '#ccc'
+        }
+      },
+      splitLine: {
+        lineStyle: {
+          type: 'dashed'
+        }
+      }
+    },
+    series: [
+      {
+        name: 'Data Series',
+        type: 'line',
+        smooth: true, // Makes the curve smooth
+        showSymbol: true, // Shows dots on data points
+        symbolSize: 8, // Increase dot size
+        itemStyle: {
+          normal: {
+            color: (params: any) => params.dataIndex < 3 ? '#048FFB' : '#ff5733', // Blue first half, Red second half
+            borderColor: '#fff',
+            borderWidth: 2
+          }
+        },
+        lineStyle: {
+          width: 4,
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 1,
+            y2: 0,
+            colorStops: [
+              { offset: 0, color: '#048FFB' },
+              { offset: 0.5, color: '#ff5733' },
+              { offset: 0.51, color: '#ff5733' },
+              { offset: 1, color: '#ff5733' }
+            ]
+          }
+        },
+        areaStyle: {
+          opacity: 0.2, // Light filled area under the curve
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: 'rgba(4, 143, 251, 0.5)' },
+              { offset: 1, color: 'rgba(255, 87, 51, 0.2)' }
+            ]
+          }
+        },
+        emphasis: {
+          focus: 'series',
+          itemStyle: {
+            borderColor: '#000',
+            borderWidth: 2
+          }
+        },
+        animationDuration: 1500, // Smooth animation
+        animationEasing: 'cubicOut',
+        data: [190, 195, 200, 210, 220, 230, 240, 250, 260, 270, 280],
+      }
+    ]
+  };
+
+  
+  chartOptionsecx= {
+    xAxis: {
+      type: 'category',
+      data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        name: 'Stock Price',
+        type: 'line',
+        data: [190, 195, 200, 210, 220, 230, 240, 250, 260, 270, 280],
+        lineStyle: {
+          color: {
+            type: 'linear',
+            x: 0, // left to right
+            y: 0,
+            x2: 1, // full width
+            y2: 0,
+            colorStops: [
+              { offset: 0, color: '#048FFB' },  // 0% - Blue
+              { offset: 0.49, color: '#ff5733' }, // 49% - Still Blue
+              { offset: 0.51, color: '#ff5733' }, // 51% - Now Red
+              { offset: 1, color: '#ff5733' }  // 100% - Fully Red
+            ]
+          },
+          width: 3 // Optional: Adjust thickness
+        },
+        itemStyle: {
+          color: (params: any) => params.dataIndex < 3 ? '#048FFB' : '#ff5733'
+        },
+        // lineStyle: {
+        //   color: (params: any) => params.dataIndex < 3 ? '#ffffff' : '#ff5733'
+        // }
+      }
+    ]
+  };
+
   // Line Chart Data for Each Stock
   chartSeries = [
-    [ 
-      { name: "Actual", data: [190, 195, 200, 210, 220, 230] },
-      { name: "Predicted", data: [230, 240, 250, 260, 270, 280] }
-    ],
-    [ 
-      { name: "Actual", data: [120, 125, 130, 140, 150, 160] },
-      { name: "Predicted", data: [160, 170, 180, 190, 200, 210] }
-    ],
-    [ 
-      { name: "Actual", data: [2900, 2950, 3000, 3100, 3200, 3300] },
-      { name: "Predicted", data: [3300, 3400, 3500, 3600, 3700, 3800] }
+    [
+      {
+        name: "Actual",
+        data: [
+          { x: "Point 1", y: 190 },
+          { x: "Point 2", y: 195 },
+          { x: "Point 3", y: 200 },
+          { x: "Point 4", y: 210 },
+          { x: "Point 5", y: 220 },
+          { x: "Point 6", y: 230 },
+          { x: "Point 7", y: null } // Connects to predicted
+        ],
+        color: "#008FFB" // Blue for actual
+      },
+      {
+        name: "Predicted",
+        data: [
+          { x: "Point 6", y: 230 }, // Start from the last actual point
+          { x: "Point 7", y: 240 },
+          { x: "Point 8", y: 250 },
+          { x: "Point 9", y: 260 },
+          { x: "Point 10", y: 270 },
+          { x: "Point 11", y: 280 }
+        ],
+        color: "#FF4560" // Red for predicted
+      }
     ]
   ];
 
