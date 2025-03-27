@@ -72,15 +72,15 @@ export class NavRightComponent {
   }
 
   ngOnInit() {
-    this.name = localStorage.getItem('tubenotes_name');
-    this.email = localStorage.getItem('tubenotes_email');
-    this.payload = JSON.parse(localStorage.getItem('tubenotes_google_payload') || '{}');
+    this.name = localStorage.getItem('quantai_name');
+    this.email = localStorage.getItem('quantai_email');
+    this.payload = JSON.parse(localStorage.getItem('quantai_google_payload') || '{}');
     console.log(this.payload.picture)
   }
 
   logout() {
-    localStorage.removeItem('tubenotes_token'); // Clear token
-    localStorage.removeItem('tubenotes_google_payload'); // Clear Google payload if stored
+    localStorage.removeItem('quantai_token'); // Clear token
+    localStorage.removeItem('quantai_google_payload'); // Clear Google payload if stored
     this.router.navigate(['/login']); // Redirect to login
   }
 

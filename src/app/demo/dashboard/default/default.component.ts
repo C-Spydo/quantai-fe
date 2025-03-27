@@ -58,6 +58,7 @@ export class DefaultComponent {
 
   activeStockTab = 0;  // Active stock (AMZN, TSLA, GOOG)
   activeSubTab = 0;    // Active section inside summary card
+  isGuest = false;
 
   // Main Stocks Tab
   stocks = [
@@ -320,6 +321,13 @@ export class DefaultComponent {
   }
 
 
-  ngOnInit() {}
+  ngOnInit() {
+    const token = localStorage.getItem('quantai_token');
+    if (!token) {
+      localStorage.setItem('quantai_guest','true');
+      this.isGuest = true;
+    }
+  }
+
 
 }

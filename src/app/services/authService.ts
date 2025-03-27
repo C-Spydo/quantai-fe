@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   getDashboard(): Observable<any> {
-    let user_id = localStorage.getItem('tubenotes_id');
+    let user_id = localStorage.getItem('quantai_id');
     return this.http.get<{ data: any }>(`${this.baseUrl}/dashboard/${user_id}`).pipe(
       map((response) => response.data)
     );

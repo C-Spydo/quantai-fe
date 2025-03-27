@@ -77,7 +77,7 @@
         <p class="p-3 bg-light border rounded">{{ insightText[activeStockTab] }}</p>
       </div>
 
-      <div *ngIf="activeSubTab === 5">
+      <div *ngIf="isGuest == false && activeSubTab === 5">
         <textarea [(ngModel)]="feedbackText" class="form-control" rows="3" placeholder="Enter your feedback"></textarea>
         <button class="btn btn-primary mt-2" (click)="submitFeedback()">Submit</button>
       </div>

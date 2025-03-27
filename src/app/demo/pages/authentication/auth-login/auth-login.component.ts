@@ -22,7 +22,7 @@ export class AuthLoginComponent {
   password: string = '';
 
   ngOnInit() {
-    const token = localStorage.getItem('tubenotes_token');
+    const token = localStorage.getItem('quantai_token');
     if (token) {
       this.router.navigate(['/dashboard']); // Redirect to dashboard
     }
@@ -57,7 +57,7 @@ export class AuthLoginComponent {
     // Decode the JWT token to get user details
     const payload = JSON.parse(atob(token.split('.')[1]));
     console.log(payload);
-    localStorage.setItem('tubenotes_google_payload', JSON.stringify(payload));
+    localStorage.setItem('quantai_google_payload', JSON.stringify(payload));
     const userData = {
       name: payload.name,
       email: payload.email,
@@ -67,11 +67,11 @@ export class AuthLoginComponent {
     this.authService.signIn(userData).subscribe({
       next: (data) => {
         console.log(data);
-        localStorage.setItem('tubenotes_token', data.token);
-        localStorage.setItem('tubenotes_name', data.name);
-        localStorage.setItem('tubenotes_email', data.email);
-        localStorage.setItem('tubenotes_id', data.id);
-        localStorage.setItem('tubenotes_total_summary', data.notebooks.length);
+        localStorage.setItem('quantai_token', data.token);
+        localStorage.setItem('quantai_name', data.name);
+        localStorage.setItem('quantai_email', data.email);
+        localStorage.setItem('quantai_id', data.id);
+        localStorage.setItem('quantai_total_summary', data.notebooks.length);
         showNotification(true, 'Sign In successful');
         this.router.navigate(['/dashboard']);
       },
@@ -95,10 +95,10 @@ export class AuthLoginComponent {
     this.authService.signInWithEmail({email:this.email, password:this.password}).subscribe({
       next: (data) => {
         console.log(data);
-        localStorage.setItem('tubenotes_token', data.token);
-        localStorage.setItem('tubenotes_name', data.name);
-        localStorage.setItem('tubenotes_email', data.email);
-        localStorage.setItem('tubenotes_id', data.id);
+        localStorage.setItem('quantai_token', data.token);
+        localStorage.setItem('quantai_name', data.name);
+        localStorage.setItem('quantai_email', data.email);
+        localStorage.setItem('quantai_id', data.id);
         showNotification(true, 'Sign In successful');
         this.router.navigate(['/dashboard']);
       },
