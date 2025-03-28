@@ -32,7 +32,7 @@
 
       <!-- Sub Tab Content -->
       <div *ngIf="activeSubTab === 0">
-        <!-- <apx-chart 
+        <apx-chart 
         *ngIf="chartSeries[activeStockTab]?.length > 0"
         [series]="chartSeries[activeStockTab]" 
         [chart]="{ type: 'line', height: 350 }"
@@ -42,42 +42,30 @@
         [stroke]="{ curve: 'smooth', width: 2 }"
         
         >
-      </apx-chart> -->
-      <div echarts [options]="chartOptionsec" class="chart-container"></div>
+      </apx-chart>
+      <!-- <div echarts [options]="chartOptionsec" class="chart-container"></div> -->
       </div>
 
       
       <div *ngIf="activeSubTab === 1">
         <apx-chart 
-          *ngIf="chartSeriesb[activeStockTab].length > 0"
-          [series]="chartSeriesb[activeStockTab]" 
-          [chart]="{ type: 'candlestick', height: 350 }"
-          [tooltip]="chartOptionsb.tooltip"
-          [xaxis]="chartOptionsb.xaxis">
+          *ngIf="chartSeries[activeStockTab]?.length > 0"
+          [series]="chartSeries[activeStockTab]" 
+          [chart]="{ type: 'line', height: 350 }"
+          [xaxis]="{
+            categories: ['Point 1', 'Point 2', 'Point 3', 'Point 4', 'Point 5', 'Point 6', 'Point 7', 'Point 8', 'Point 9', 'Point 10', 'Point 11']
+          }"
+          [stroke]="{ curve: 'smooth', width: 2 }"
+          
+          >
         </apx-chart>
       </div>
 
       <div *ngIf="activeSubTab === 2">
-        <apx-chart 
-          [series]="sentimentSeries[activeStockTab]" 
-          [chart]="{ type: 'pie', height: 350 }"
-          [labels]="['Positive', 'Negative', 'Neutral']">
-        </apx-chart>
+        <p class="p-3 bg-light border rounded">{{ insight }}</p>
       </div>
 
-      <div *ngIf="activeSubTab === 3">
-        <apx-chart 
-          [series]="sectorSeries[activeStockTab]" 
-          [chart]="{ type: 'bar', height: 350 }"
-          [xaxis]="{ categories: ['Tech', 'Finance', 'Healthcare', 'Energy', 'Retail'] }">
-        </apx-chart>
-      </div>
-
-      <div *ngIf="activeSubTab === 4">
-        <p class="p-3 bg-light border rounded">{{ insightText[activeStockTab] }}</p>
-      </div>
-
-      <div *ngIf="isGuest == false && activeSubTab === 5">
+      <div *ngIf="isGuest == false && activeSubTab === 3">
         <textarea [(ngModel)]="feedbackText" class="form-control" rows="3" placeholder="Enter your feedback"></textarea>
         <button class="btn btn-primary mt-2" (click)="submitFeedback()">Submit</button>
       </div>

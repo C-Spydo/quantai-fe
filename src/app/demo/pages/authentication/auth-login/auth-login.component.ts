@@ -71,7 +71,7 @@ export class AuthLoginComponent {
         localStorage.setItem('quantai_name', data.name);
         localStorage.setItem('quantai_email', data.email);
         localStorage.setItem('quantai_id', data.id);
-        localStorage.setItem('quantai_total_summary', data.notebooks.length);
+
         showNotification(true, 'Sign In successful');
         this.router.navigate(['/dashboard']);
       },

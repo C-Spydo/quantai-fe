@@ -12,6 +12,7 @@ import { CardComponent } from 'src/app/theme/shared/components/card/card.compone
 import { showNotification } from 'src/app/demo/utils/notification';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/authService';
+import { AnalysisService } from 'src/app/services/analysisService';
 import { ChartComponent, NgApexchartsModule } from "ng-apexcharts";
 import { ApexOptions } from "apexcharts"; 
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -52,30 +53,42 @@ echarts.use([CanvasRenderer, LineChart, GridComponent, TooltipComponent, LegendC
 export class DefaultComponent {
   private iconService = inject(IconService);
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, 
+    private router: Router,
+    private analysisService: AnalysisService
+  ) {
     this.iconService.addIcon(...[RiseOutline, FallOutline, SettingOutline, GiftOutline, MessageOutline]);
   }
 
   activeStockTab = 0;  // Active stock (AMZN, TSLA, GOOG)
   activeSubTab = 0;    // Active section inside summary card
   isGuest = false;
+  insight = '';
+  chat_id;
+  predictedPrices: any[] = [];
+  stockPrices: any[] = [];
+  fetching = true;
+
+
 
   // Main Stocks Tab
   stocks = [
     { symbol: "AMZN", name: "Amazon" },
     { symbol: "TSLA", name: "Tesla" },
-    { symbol: "GOOG", name: "Google" }
+    { symbol: "GOOG", name: "Google" },
+    { symbol: "MSFT", name: "Microsoft" }
   ];
 
   // Sub Tabs inside Stock Summary
   subTabs = [
-    { label: "Price Trends" },
-    { label: "Volatility Analysis" },
-    { label: "Sentiment Analysis" },
-    { label: "Sector Performance" },
+    { label: "Stock Prices" },
+    { label: "Predicted Prices" },
     { label: "Insight" },
     { label: "Feedback" }
   ];
+
+
+
 
   chartOptionsec = {
     title: {
@@ -327,7 +340,31 @@ export class DefaultComponent {
       localStorage.setItem('quantai_guest','true');
       this.isGuest = true;
     }
+    this.getAnalysis();
   }
 
+  getAnalysis(){
+    let payload: any = {};
+    payload.stock = this.stocks[this.activeStockTab].symbol;
+    if(!this.isGuest) {
+      const userId = localStorage.getItem('quantai_id');
+      if (userId) payload.user_id = parseInt(userId, 10);
+    }
+
+    this.analysisService.startChat(payload).subscribe({
+      next: (data) => {
+        this.predictedPrices = data.predicted_prices;
+        this.stockPrices = data.stock_prices;
+        this.chat_id = data.chat_id;
+        this.insight = data.analysis;
+        this.fetching = false;
+        console.log('the insight');
+        console.log(this.insight);
+      },
+      error: (err) => {
+        console.error('Error fetching Analysis:', err);
+      }
+    });
+  }
 
 }
