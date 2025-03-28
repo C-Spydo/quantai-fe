@@ -33,6 +33,16 @@
       <!-- Sub Tab Content -->
       <div *ngIf="activeSubTab === 0">
         <apx-chart 
+          *ngIf="chartOptionsStock"
+          [series]="chartOptionsStock.series"
+          [chart]="chartOptionsStock.chart"
+          [xaxis]="chartOptionsStock.xaxis"
+          [yaxis]="chartOptionsStock.yaxis"
+          [stroke]="chartOptionsStock.stroke"
+          [tooltip]="chartOptionsStock.tooltip">
+        </apx-chart>
+
+        <!-- <apx-chart 
         *ngIf="chartSeries[activeStockTab]?.length > 0"
         [series]="chartSeries[activeStockTab]" 
         [chart]="{ type: 'line', height: 350 }"
@@ -42,23 +52,21 @@
         [stroke]="{ curve: 'smooth', width: 2 }"
         
         >
-      </apx-chart>
+      </apx-chart> -->
       <!-- <div echarts [options]="chartOptionsec" class="chart-container"></div> -->
       </div>
 
       
       <div *ngIf="activeSubTab === 1">
-        <apx-chart 
-          *ngIf="chartSeries[activeStockTab]?.length > 0"
-          [series]="chartSeries[activeStockTab]" 
-          [chart]="{ type: 'line', height: 350 }"
-          [xaxis]="{
-            categories: ['Point 1', 'Point 2', 'Point 3', 'Point 4', 'Point 5', 'Point 6', 'Point 7', 'Point 8', 'Point 9', 'Point 10', 'Point 11']
-          }"
-          [stroke]="{ curve: 'smooth', width: 2 }"
-          
-          >
-        </apx-chart>
+            <apx-chart 
+            *ngIf="chartOptionsPredicted"
+            [series]="chartOptionsPredicted.series"
+            [chart]="chartOptionsPredicted.chart"
+            [xaxis]="chartOptionsPredicted.xaxis"
+            [yaxis]="chartOptionsPredicted.yaxis"
+            [stroke]="chartOptionsPredicted.stroke"
+            [tooltip]="chartOptionsPredicted.tooltip">
+          </apx-chart>
       </div>
 
       <div *ngIf="activeSubTab === 2">
