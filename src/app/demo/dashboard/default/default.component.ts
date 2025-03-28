@@ -96,6 +96,7 @@ export class DefaultComponent {
   setActiveStock(index: number) {
     this.activeStockTab = index;
     this.activeSubTab = 0; // Reset sub-tab when switching stocks
+    this.getAnalysis();
   }
 
   setActiveSubTab(index: number) {
@@ -145,6 +146,7 @@ export class DefaultComponent {
   }
 
   generateStockPriceChart(){
+    this.stockPrices = this.stockPrices.slice().reverse();
     const categories = this.stockPrices.map(item => item.date);
     const prices = this.stockPrices.map(item => item.price);
 
